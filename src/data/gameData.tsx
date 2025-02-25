@@ -1,5 +1,44 @@
-// src/data/gameData.js
-export const portsData = [
+// src/data/gameData.ts
+
+export interface Port {
+  id: number;
+  name: string;
+  country: string;
+  description: string;
+  coordinates: { x: number; y: number };
+  souvenirPoints: number;
+  souvenirName: string;
+  facts: string[];
+}
+
+export interface Obstacle {
+  type: string;
+  damage: number;
+  speed: number;
+  frequency: number;
+  sprite: string;
+}
+
+export interface PowerUp {
+  type: string;
+  effect: string;
+  value: number;
+  duration: number;
+  frequency: number;
+  sprite: string;
+}
+
+export interface GameSettings {
+  playerInitialHealth: number;
+  playerBaseSpeed: number;
+  maxLevel: number;
+  scoreMultiplier: number;
+  bulletSpeed: number;
+  gameWidth: number;
+  gameHeight: number;
+}
+
+export const portsData: Port[] = [
   {
     id: 1,
     name: "Basel",
@@ -128,7 +167,7 @@ export const portsData = [
   }
 ];
 
-export const obstacles = [
+export const obstacles: Obstacle[] = [
   {
     type: "Rocks",
     damage: 15,
@@ -159,7 +198,7 @@ export const obstacles = [
   }
 ];
 
-export const powerUps = [
+export const powerUps: PowerUp[] = [
   {
     type: "Engine Boost",
     effect: "speed",
@@ -194,7 +233,7 @@ export const powerUps = [
   }
 ];
 
-export const gameSettings = {
+export const gameSettings: GameSettings = {
   playerInitialHealth: 100,
   playerBaseSpeed: 3,
   maxLevel: 9,
