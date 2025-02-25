@@ -38,7 +38,7 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <p>Based on the Uniworld "Castles along the Rhine" cruise from Basel to Amsterdam</p>
+        <p>Based on the Uniworld &quot;Castles along the Rhine&quot; cruise from Basel to Amsterdam</p>
       </footer>
     </div>
   );

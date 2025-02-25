@@ -1,6 +1,6 @@
 // src/components/RhineCruiseGame.js
-import React, { useState, useEffect, useRef } from 'react';
-import { portsData, obstacles, powerUps, riverSegments, gameSettings } from '../data/gameData';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { portsData, obstacles, powerUps, gameSettings } from '../data/gameData';
 import styles from '../styles/Game.module.css';
 
 const RhineCruiseGame = () => {
@@ -66,62 +66,8 @@ const RhineCruiseGame = () => {
     };
   }, [gameStarted, gameOver, playerPosition]);
   
-  // Main game loop
-  useEffect(() => {
-    if (!gameStarted || gameOver) return;
-    
-    let lastTimestamp = 0;
-    const playerBaseSpeed = gameSettings.playerBaseSpeed;
-    
-    const gameLoop = (timestamp) => {
-      // Calculate time delta
-      const deltaTime = lastTimestamp ? (timestamp - lastTimestamp) / 16 : 1;
-      lastTimestamp = timestamp;
-      
-      // Update player position based on keyboard input
-      updatePlayerPosition(deltaTime, playerBaseSpeed);
-      
-      // Generate obstacles and power-ups
-      generateObstaclesAndPowerUps(timestamp);
-      
-      // Update obstacle positions
-      updateObstacles(deltaTime);
-      
-      // Update power-up positions
-      updatePowerUps(deltaTime);
-      
-      // Update bullet positions
-      updateBullets(deltaTime);
-      
-      // Check for collisions
-      checkCollisions();
-      
-      // Check if player reached a port
-      checkPortReached();
-      
-      // Check player health
-      if (playerHealth <= 0) {
-        setGameOver(true);
-        return;
-      }
-      
-      // Continue game loop
-      animationFrameId.current = requestAnimationFrame(gameLoop);
-    };
-    
-    // Start the game loop
-    animationFrameId.current = requestAnimationFrame(gameLoop);
-    
-    // Clean up
-    return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-    };
-  }, [gameStarted, gameOver, keyState, playerHealth, currentPort, activeObstacles, activePowerUps, playerPowerUps, bullets]);
-  
   // Update player position based on keyboard input
-  const updatePlayerPosition = (deltaTime, baseSpeed) => {
+  const updatePlayerPosition = useCallback((deltaTime, baseSpeed) => {
     const speedBoost = playerPowerUps.find(pu => pu.effect === 'speed')?.value || 1;
     const speed = baseSpeed * speedBoost * deltaTime;
     
@@ -138,86 +84,10 @@ const RhineCruiseGame = () => {
     newY = Math.max(0, Math.min(gameSettings.gameHeight - 50, newY));
     
     setPlayerPosition({ x: newX, y: newY });
-  };
-  
-  // Generate obstacles and power-ups at random intervals
-  const generateObstaclesAndPowerUps = (timestamp) => {
-    // Generate obstacles
-    if (timestamp - lastObstacleTime.current > 1000) {
-      obstacles.forEach(obstacle => {
-        if (Math.random() < obstacle.frequency) {
-          const newObstacle = {
-            ...obstacle,
-            x: Math.random() * (gameSettings.gameWidth - 30),
-            y: -30,
-            id: Date.now() + Math.random()
-          };
-          setActiveObstacles(prev => [...prev, newObstacle]);
-        }
-      });
-      lastObstacleTime.current = timestamp;
-    }
-    
-    // Generate power-ups
-    if (timestamp - lastPowerUpTime.current > 2000) {
-      powerUps.forEach(powerUp => {
-        if (Math.random() < powerUp.frequency) {
-          const newPowerUp = {
-            ...powerUp,
-            x: Math.random() * (gameSettings.gameWidth - 30),
-            y: -30,
-            id: Date.now() + Math.random()
-          };
-          setActivePowerUps(prev => [...prev, newPowerUp]);
-        }
-      });
-      lastPowerUpTime.current = timestamp;
-    }
-  };
-  
-  // Update obstacle positions
-  const updateObstacles = (deltaTime) => {
-    setActiveObstacles(prev => 
-      prev.filter(obstacle => {
-        const newY = obstacle.y + obstacle.speed * deltaTime;
-        obstacle.y = newY;
-        return newY < gameSettings.gameHeight; // Keep obstacles on screen
-      })
-    );
-  };
-  
-  // Update power-up positions
-  const updatePowerUps = (deltaTime) => {
-    setActivePowerUps(prev => 
-      prev.filter(powerUp => {
-        const newY = powerUp.y + 2 * deltaTime; // Power-ups move slower than obstacles
-        powerUp.y = newY;
-        return newY < gameSettings.gameHeight; // Keep power-ups on screen
-      })
-    );
-    
-    // Update player power-up durations
-    const currentTime = Date.now();
-    setPlayerPowerUps(prev => 
-      prev.filter(powerUp => {
-        return !powerUp.endTime || currentTime < powerUp.endTime;
-      })
-    );
-  };
-  
-  // Update bullet positions
-  const updateBullets = (deltaTime) => {
-    setBullets(prev => 
-      prev.filter(bullet => {
-        const newY = bullet.y - gameSettings.bulletSpeed * deltaTime;
-        bullet.y = newY;
-        return newY > 0; // Remove bullets that go off-screen
-      })
-    );
-  };
+  }, [keyState, playerPosition, playerPowerUps]);
   
   // Check for collisions between player, obstacles, power-ups, and bullets
-  const checkCollisions = () => {
+  const checkCollisions = useCallback(() => {
     const playerRect = {
       x: playerPosition.x,
       y: playerPosition.y,
@@ -300,7 +170,7 @@ const RhineCruiseGame = () => {
         return true; // Keep the power-up
       })
     );
-  };
+  }, [playerPosition, playerPowerUps]);
   
   // Helper function to check for rectangle collision
   const checkRectCollision = (rect1, rect2) => {
@@ -313,7 +183,7 @@ const RhineCruiseGame = () => {
   };
   
   // Check if player reached a port
-  const checkPortReached = () => {
+  const checkPortReached = useCallback(() => {
     if (currentPort >= portsData.length - 1) return; // Already at final port
     
     const nextPort = portsData[currentPort + 1];
@@ -353,6 +223,149 @@ const RhineCruiseGame = () => {
         setScore(prev => prev + 1000); // Bonus for completing the journey
       }
     }
+  }, [currentPort, playerPosition, playerPowerUps]);
+  
+  // Main game loop
+  useEffect(() => {
+    if (!gameStarted || gameOver) return;
+    
+    let lastTimestamp = 0;
+    const playerBaseSpeed = gameSettings.playerBaseSpeed;
+    
+    const gameLoop = (timestamp) => {
+      // Calculate time delta
+      const deltaTime = lastTimestamp ? (timestamp - lastTimestamp) / 16 : 1;
+      lastTimestamp = timestamp;
+      
+      // Update player position based on keyboard input
+      updatePlayerPosition(deltaTime, playerBaseSpeed);
+      
+      // Generate obstacles and power-ups
+      generateObstaclesAndPowerUps(timestamp);
+      
+      // Update obstacle positions
+      updateObstacles(deltaTime);
+      
+      // Update power-up positions
+      updatePowerUps(deltaTime);
+      
+      // Update bullet positions
+      updateBullets(deltaTime);
+      
+      // Check for collisions
+      checkCollisions();
+      
+      // Check if player reached a port
+      checkPortReached();
+      
+      // Check player health
+      if (playerHealth <= 0) {
+        setGameOver(true);
+        return;
+      }
+      
+      // Continue game loop
+      animationFrameId.current = requestAnimationFrame(gameLoop);
+    };
+    
+    // Start the game loop
+    animationFrameId.current = requestAnimationFrame(gameLoop);
+    
+    // Clean up
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, [
+    gameStarted, 
+    gameOver, 
+    keyState, 
+    playerHealth, 
+    currentPort,
+    activeObstacles,
+    activePowerUps, 
+    playerPowerUps, 
+    bullets,
+    checkCollisions,
+    checkPortReached,
+    updatePlayerPosition
+  ]);
+  
+  // Generate obstacles and power-ups at random intervals
+  const generateObstaclesAndPowerUps = (timestamp) => {
+    // Generate obstacles
+    if (timestamp - lastObstacleTime.current > 1000) {
+      obstacles.forEach(obstacle => {
+        if (Math.random() < obstacle.frequency) {
+          const newObstacle = {
+            ...obstacle,
+            x: Math.random() * (gameSettings.gameWidth - 30),
+            y: -30,
+            id: Date.now() + Math.random()
+          };
+          setActiveObstacles(prev => [...prev, newObstacle]);
+        }
+      });
+      lastObstacleTime.current = timestamp;
+    }
+    
+    // Generate power-ups
+    if (timestamp - lastPowerUpTime.current > 2000) {
+      powerUps.forEach(powerUp => {
+        if (Math.random() < powerUp.frequency) {
+          const newPowerUp = {
+            ...powerUp,
+            x: Math.random() * (gameSettings.gameWidth - 30),
+            y: -30,
+            id: Date.now() + Math.random()
+          };
+          setActivePowerUps(prev => [...prev, newPowerUp]);
+        }
+      });
+      lastPowerUpTime.current = timestamp;
+    }
+  };
+  
+  // Update obstacle positions
+  const updateObstacles = (deltaTime) => {
+    setActiveObstacles(prev => 
+      prev.filter(obstacle => {
+        const newY = obstacle.y + obstacle.speed * deltaTime;
+        obstacle.y = newY;
+        return newY < gameSettings.gameHeight; // Keep obstacles on screen
+      })
+    );
+  };
+  
+  // Update power-up positions
+  const updatePowerUps = (deltaTime) => {
+    setActivePowerUps(prev => 
+      prev.filter(powerUp => {
+        const newY = powerUp.y + 2 * deltaTime; // Power-ups move slower than obstacles
+        powerUp.y = newY;
+        return newY < gameSettings.gameHeight; // Keep power-ups on screen
+      })
+    );
+    
+    // Update player power-up durations
+    const currentTime = Date.now();
+    setPlayerPowerUps(prev => 
+      prev.filter(powerUp => {
+        return !powerUp.endTime || currentTime < powerUp.endTime;
+      })
+    );
+  };
+  
+  // Update bullet positions
+  const updateBullets = (deltaTime) => {
+    setBullets(prev => 
+      prev.filter(bullet => {
+        const newY = bullet.y - gameSettings.bulletSpeed * deltaTime;
+        bullet.y = newY;
+        return newY > 0; // Remove bullets that go off-screen
+      })
+    );
   };
   
   // Render game UI
