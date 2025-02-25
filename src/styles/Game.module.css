@@ -1,0 +1,248 @@
+/* src/styles/Game.module.css */
+.gameContainer {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  position: relative;
+  border: 3px solid #0077be;
+  overflow: hidden;
+  background-image: linear-gradient(to bottom, #87CEEB, #4682b4);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
+}
+
+.startScreen, .gameOverScreen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 20px;
+}
+
+.startButton {
+  background-color: #0077be;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.startButton:hover {
+  background-color: #005a9c;
+  transform: scale(1.05);
+}
+
+.gamePlayArea {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.playerShip {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #0077be;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.bullet {
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  background-color: #ff4d4d;
+  border-radius: 50%;
+}
+
+.obstacle {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  z-index: 5;
+}
+
+.powerUp {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  z-index: 5;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+.port {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.portName {
+  position: absolute;
+  bottom: -25px;
+  white-space: nowrap;
+  font-size: 12px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2px 6px;
+  border-radius: 10px;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.visitedPort {
+  transform: scale(1.2);
+  filter: brightness(1.3);
+}
+
+.gameHUD {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  z-index: 20;
+  max-width: 200px;
+}
+
+.score, .health, .currentPort, .souvenirs {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.healthBar {
+  width: 100%;
+  height: 8px;
+  background-color: #ff0000;
+  border-radius: 4px;
+  margin-top: 3px;
+  overflow: hidden;
+}
+
+.healthBarFill {
+  height: 100%;
+  background-color: #00ff00;
+  transition: width 0.3s ease;
+}
+
+.activePowerUps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.powerUpIndicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.river {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, 
+    rgba(70, 130, 180, 0.8) 10%, 
+    rgba(70, 130, 180, 0.4) 20%, 
+    rgba(70, 130, 180, 0.6) 30%,
+    rgba(70, 130, 180, 0.5) 40%, 
+    rgba(70, 130, 180, 0.7) 50%,
+    rgba(70, 130, 180, 0.5) 60%,
+    rgba(70, 130, 180, 0.6) 70%,
+    rgba(70, 130, 180, 0.4) 80%,
+    rgba(70, 130, 180, 0.8) 90%
+  );
+  z-index: 0;
+}
+
+.riverBank {
+  position: absolute;
+  height: 100%;
+  width: 80px;
+  background-color: #228B22;
+  z-index: 0;
+}
+
+.leftBank {
+  left: 0;
+}
+
+.rightBank {
+  right: 0;
+}
+
+.souvenirsPanel {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  z-index: 20;
+  max-width: 150px;
+  font-size: 12px;
+}
+
+.souvenirsPanel h3 {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.souvenir {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.souvenir.collected {
+  color: #00ff00;
+}
+
+.souvenir.notCollected {
+  color: #aaaaaa;
+}
+
+@keyframes floatingObstacle {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+  100% { transform: translateY(0px); }
+}
+
+.obstacle {
+  animation: floatingObstacle 2s infinite ease-in-out;
+}
