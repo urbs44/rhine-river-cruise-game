@@ -11,7 +11,7 @@ const AIGuide: React.FC<AIGuideProps> = ({ destinationId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   
-  const { player } = useGameStore();
+  const { } = useGameStore();
   
   // Pre-defined responses for each destination
   const guideResponses: Record<string, Record<string, string>> = {

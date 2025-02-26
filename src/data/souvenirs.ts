@@ -1,4 +1,4 @@
-import { Souvenir, SouvenirRarity } from '@/types/game.types';
+import { Souvenir } from '@/types/game.types';
 
 export const souvenirs: Souvenir[] = [
   // Amsterdam Souvenirs

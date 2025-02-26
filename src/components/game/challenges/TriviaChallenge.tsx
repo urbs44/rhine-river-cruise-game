@@ -7,8 +7,15 @@ interface TriviaChallengeProps {
   onComplete: () => void;
 }
 
+interface TriviaQuestion {
+    question: string;
+    answers: string[];
+    correctAnswerIndex: number;
+    explanation?: string;
+  }
+
 const TriviaChallenge: React.FC<TriviaChallengeProps> = ({ excursion, onComplete }) => {
-  const [questions, setQuestions] = useState<any[]>([]);
+    const [questions, setQuestions] = useState<TriviaQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);

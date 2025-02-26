@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Excursion } from '@/types/game.types';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import { useGameStore } from '@/store/gameStore';
@@ -13,7 +14,7 @@ export default function ExcursionPage() {
   const { id } = router.query;
   const { gameStarted, player, completeExcursion } = useGameStore();
   
-  const [excursion, setExcursion] = useState<any>(null);
+  const [excursion, setExcursion] = useState<Excursion | null>(null);
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(false);
   
@@ -25,7 +26,7 @@ export default function ExcursionPage() {
     
     if (id && typeof id === 'string') {
       const foundExcursion = getExcursionById(id);
-      setExcursion(foundExcursion);
+      setExcursion(foundExcursion || null);
       setLoading(false);
       
       if (foundExcursion && player.completedExcursions.includes(foundExcursion.id)) {

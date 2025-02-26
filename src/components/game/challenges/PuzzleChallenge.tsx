@@ -6,8 +6,17 @@ interface PuzzleChallengeProps {
   onComplete: () => void;
 }
 
+interface Puzzle {
+    title: string;
+    description: string;
+    riddle: string;
+    solution: string;
+    facts: string[];
+    hints: string[];
+  }
+
 const PuzzleChallenge: React.FC<PuzzleChallengeProps> = ({ excursion, onComplete }) => {
-  const [puzzle, setPuzzle] = useState<any>(null);
+  const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
   const [userSolution, setUserSolution] = useState<string>('');
   const [feedback, setFeedback] = useState<string | null>(null);
   const [feedbackType, setFeedbackType] = useState<'success' | 'error' | null>(null);

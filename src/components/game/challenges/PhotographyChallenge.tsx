@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Excursion } from '@/types/game.types';
+import Image from 'next/image';
 
 interface PhotographyChallengeProps {
   excursion: Excursion;
   onComplete: () => void;
 }
 
-const PhotographyChallenge: React.FC<PhotographyChallengeProps> = ({ excursion, onComplete }) => {
+const PhotographyChallenge: React.FC<PhotographyChallengeProps> = ({ onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
@@ -83,10 +84,12 @@ const PhotographyChallenge: React.FC<PhotographyChallengeProps> = ({ excursion, 
       <p className="mb-4">{currentTarget.description}</p>
       
       <div className="mb-6 border rounded-lg overflow-hidden">
-        <img 
-          src={currentTarget.image} 
-          alt={currentTarget.name} 
-          className="w-full h-64 object-cover"
+      <Image 
+        src={currentTarget.image} 
+        alt={currentTarget.name}
+        width={800}
+        height={256}
+        className="w-full h-64 object-cover"
         />
       </div>
       

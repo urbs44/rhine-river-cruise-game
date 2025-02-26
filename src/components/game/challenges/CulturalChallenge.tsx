@@ -6,7 +6,7 @@ interface CulturalChallengeProps {
   onComplete: () => void;
 }
 
-const CulturalChallenge: React.FC<CulturalChallengeProps> = ({ excursion, onComplete }) => {
+const CulturalChallenge: React.FC<CulturalChallengeProps> = ({ onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [userChoices, setUserChoices] = useState<string[]>([]);
   const [completed, setCompleted] = useState(false);

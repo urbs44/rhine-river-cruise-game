@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useGameStore } from '@/store/gameStore';
-import { getSouvenirsByDestination, getSouvenirById } from '@/data/souvenirs';
+import { getSouvenirsByDestination } from '@/data/souvenirs';
 import { Souvenir } from '@/types/game.types';
+import Image from 'next/image';
 
 interface SouvenirShopProps {
   destinationId: string;
@@ -74,10 +75,12 @@ const SouvenirShop: React.FC<SouvenirShopProps> = ({ destinationId }) => {
               return (
                 <div key={souvenir.id} className="border rounded-lg p-3 flex">
                   <div className="w-16 h-16 bg-gray-100 rounded-md mr-3 flex-shrink-0 overflow-hidden">
-                    <img 
-                      src={souvenir.image || '/assets/images/placeholder.png'} 
-                      alt={souvenir.name} 
-                      className="w-full h-full object-cover"
+                  <Image 
+                    src={souvenir.image || '/assets/images/placeholder.png'} 
+                    alt={souvenir.name}
+                    width={100}
+                    height={100}
+                    className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="flex-grow">
