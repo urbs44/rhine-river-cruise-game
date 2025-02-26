@@ -75,7 +75,7 @@ export const useGameStore = create<GameStore>()(
           player: {
             ...state.player,
             currentDestinationId: destinationId as DestinationId,
-            visitedDestinations: [...new Array(...state.player.visitedDestinations, destinationId as DestinationId)]
+            visitedDestinations: Array.from(new Set([...state.player.visitedDestinations, destinationId as DestinationId]))
           },
           currentDestinationIndex: destinationIndex
         };

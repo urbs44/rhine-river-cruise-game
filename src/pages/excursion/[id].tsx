@@ -60,7 +60,7 @@ export default function ExcursionPage() {
       <Layout title="Excursion Not Found">
         <div className="text-center py-10">
           <h1 className="text-2xl font-bold text-red-600 mb-4">Excursion Not Found</h1>
-          <p className="mb-6">Sorry, we couldn&apos;t find the excursion you're looking for.</p>
+          <p className="mb-6">Sorry, we couldn&apos;t find the excursion you&apos;re looking for.</p>
           <button
             onClick={() => router.push('/journey')}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
