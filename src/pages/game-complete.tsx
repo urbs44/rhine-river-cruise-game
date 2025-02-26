@@ -76,7 +76,7 @@ export default function GameCompletePage() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-blue-800 mb-2">Congratulations, {player.name}!</h1>
-          <p className="text-xl text-gray-700">You've completed your Rhine River voyage!</p>
+          <p className="text-xl text-gray-700">You&apos;ve completed your Rhine River voyage!</p>
         </div>
         
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -132,8 +132,8 @@ export default function GameCompletePage() {
                 {finalLevel === 'casualTraveler' 
                   ? 'You enjoyed the sights and sounds of the Rhine River. There\'s still much more to explore!'
                   : finalLevel === 'historyBuff'
-                  ? 'You\'ve gained significant knowledge about the Rhine\'s history and culture. Well done!'
-                  : 'You\'ve mastered the Rhine River experience! Your knowledge and experience are impressive!'}
+                  ? 'You&apos;ve gained significant knowledge about the Rhine\'s history and culture. Well done!'
+                  : 'You&apos;ve mastered the Rhine River experience! Your knowledge and experience are impressive!'}
               </p>
             </div>
           </div>

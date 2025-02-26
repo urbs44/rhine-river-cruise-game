@@ -53,7 +53,7 @@ const PhotographyChallenge: React.FC<PhotographyChallengeProps> = ({ onComplete 
     return (
       <div className="text-center">
         <h2 className="text-xl font-bold mb-4">Photography Challenge Complete!</h2>
-        <p className="mb-6">You've successfully captured all the required photographs.</p>
+        <p className="mb-6">You&apos;ve successfully captured all the required photographs.</p>
         <button
           onClick={onComplete}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"

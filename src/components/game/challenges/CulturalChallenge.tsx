@@ -87,7 +87,7 @@ const CulturalChallenge: React.FC<CulturalChallengeProps> = ({ onComplete }) => 
         {passed ? (
           <div className="mt-6">
             <p className="text-green-600 font-bold mb-4">
-              You've shown good understanding of local customs and culture!
+              You&apos;ve shown good understanding of local customs and culture!
             </p>
             <button
               onClick={onComplete}
